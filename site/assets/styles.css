@@ -601,18 +601,25 @@ code, pre { font-variant-ligatures: none; }
 .CodeMirror-activeline-background { background: var(--surface-2); }
 .CodeMirror-matchingbracket { color: var(--ink) !important; background: color-mix(in srgb, var(--spark) 30%, transparent); }
 .CodeMirror-nonmatchingbracket { color: var(--bad) !important; }
-.cm-keyword { color: var(--syn-kw); font-weight: 500; }
-.cm-def { color: var(--syn-def); font-weight: 500; }
-.cm-variable-2, .cm-variable-3 { color: var(--ink); }
-.cm-builtin { color: var(--syn-builtin); }
-.cm-string, .cm-string-2 { color: var(--syn-str); }
-.cm-number { color: var(--syn-num); }
-.cm-comment { color: var(--syn-com); font-style: italic; }
-.cm-operator { color: var(--syn-op); }
-.cm-meta { color: var(--syn-num); }
-.cm-property { color: var(--ink); }
-.cm-atom { color: var(--syn-num); }
-.cm-error { color: var(--bad); }
+/* Token colours. Each rule also targets .cm-s-default so it beats CodeMirror's
+   built-in light theme (same specificity, and this file loads after it). The
+   bare .cm-* selectors cover static code highlighted with runMode. */
+.cm-keyword, .cm-s-default .cm-keyword { color: var(--syn-kw); font-weight: 500; }
+.cm-def, .cm-s-default .cm-def { color: var(--syn-def); font-weight: 500; }
+.cm-variable, .cm-s-default .cm-variable { color: var(--ink); }
+.cm-variable-2, .cm-s-default .cm-variable-2, .cm-variable-3, .cm-s-default .cm-variable-3,
+.cm-type, .cm-s-default .cm-type { color: var(--syn-builtin); }
+.cm-builtin, .cm-s-default .cm-builtin { color: var(--syn-builtin); }
+.cm-string, .cm-s-default .cm-string, .cm-string-2, .cm-s-default .cm-string-2 { color: var(--syn-str); }
+.cm-number, .cm-s-default .cm-number { color: var(--syn-num); }
+.cm-comment, .cm-s-default .cm-comment { color: var(--syn-com); font-style: italic; }
+.cm-operator, .cm-s-default .cm-operator { color: var(--syn-op); }
+.cm-meta, .cm-s-default .cm-meta { color: var(--syn-num); }
+.cm-property, .cm-s-default .cm-property { color: var(--ink); }
+.cm-atom, .cm-s-default .cm-atom { color: var(--syn-num); }
+.cm-bracket, .cm-s-default .cm-bracket { color: var(--syn-op); }
+.cm-error, .cm-s-default .cm-error { color: var(--bad); }
+.CodeMirror pre.CodeMirror-line, .CodeMirror pre.CodeMirror-line-like { font-variant-ligatures: none; }
 
 /* Responsive ------------------------------------------------------------- */
 

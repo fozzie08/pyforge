@@ -6,6 +6,8 @@ An interactive platform for learning Python, from first variables to dynamic pro
 2. **Try it:** every lesson ends with practice exercises in a LeetCode-style editor.
 3. **Prove it:** each module ends with a checkpoint of challenges that combine several skills from that module and earlier ones. The challenges are written in LeetCode's format and at its difficulty levels, and they're judged against hidden tests, including large inputs that catch slow solutions.
 
+**Live site: <https://fozzie08.github.io/pyforge/>**
+
 Everything runs in the browser. Python is [Pyodide](https://pyodide.org) (CPython compiled to WebAssembly), so there's no server, and nobody's code runs anywhere except on their own machine.
 
 ## Run it
@@ -103,9 +105,20 @@ pyforge/
 └── dist/pyforge.html     generated single-file version
 ```
 
-## Sharing it
+## Sharing and deploying
 
-`site/` is a plain static website. To give other people a link, upload the folder to any static host, such as GitHub Pages, Netlify or Cloudflare Pages. No backend is needed. Or share `dist/pyforge.html` as a file.
+Share the live link: <https://fozzie08.github.io/pyforge/>. The single-file version is also available at <https://fozzie08.github.io/pyforge/pyforge-offline.html>.
+
+Deploys are automatic. Every push to `main` runs [`.github/workflows/pages.yml`](.github/workflows/pages.yml), which runs `build.py` (checking every problem against its tests) and publishes `site/` to GitHub Pages. If a reference solution fails, the deploy stops and the live site stays as it was. To publish changes:
+
+```bash
+python3 build.py
+git add -A
+git commit -m "Add a new challenge"
+git push
+```
+
+Watch deploys in the repository's **Actions** tab. `site/` is a plain static website, so any other static host (Netlify, Cloudflare Pages) works too.
 
 ## Credits
 
