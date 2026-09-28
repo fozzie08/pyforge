@@ -10,6 +10,7 @@ tests, if a starter template already passes, or if a lesson example crashes.
 """
 
 import ast
+import hashlib
 import importlib
 import json
 import re
@@ -272,6 +273,24 @@ def build():
     return {"modules": modules, "problems": problems}
 
 
+def stamp_asset_versions():
+    """Add ?v=<content hash> to asset links in index.html.
+
+    Static hosts like GitHub Pages let browsers cache files for a while; the
+    hash changes whenever a file does, so a new deploy never mixes fresh and
+    stale assets.
+    """
+    index = SITE / "index.html"
+
+    def stamp(match):
+        path = match.group(2)
+        digest = hashlib.sha256((SITE / path).read_bytes()).hexdigest()[:10]
+        return '%s="%s?v=%s"' % (match.group(1), path, digest)
+
+    html = re.sub(r'(href|src)="(assets/[^"?]+)(?:\?v=\w+)?"', stamp, index.read_text())
+    index.write_text(html)
+
+
 def write_outputs(data):
     harness_src = (ROOT / "engine" / "harness.py").read_text()
     payload = json.dumps(data, ensure_ascii=False, separators=(",", ":"))
@@ -279,6 +298,7 @@ def write_outputs(data):
           "window.PYFORGE_CONTENT = %s;\nwindow.PYFORGE_HARNESS = %s;\n"
           % (payload, json.dumps(harness_src)))
     (SITE / "assets" / "content.js").write_text(js)
+    stamp_asset_versions()
 
     # One self-contained HTML file that works when opened straight from disk.
     html = (SITE / "index.html").read_text()
@@ -290,8 +310,8 @@ def write_outputs(data):
         src = (SITE / match.group(1)).read_text().replace("</script", "<\\/script")
         return "<script>\n%s\n</script>" % src
 
-    html = re.sub(r'<link rel="stylesheet" href="(assets/[^"]+)">', inline_css, html)
-    html = re.sub(r'<script src="(assets/[^"]+)"></script>', inline_js, html)
+    html = re.sub(r'<link rel="stylesheet" href="(assets/[^"?]+)(?:\?v=\w+)?">', inline_css, html)
+    html = re.sub(r'<script src="(assets/[^"?]+)(?:\?v=\w+)?"></script>', inline_js, html)
     DIST.mkdir(exist_ok=True)
     (DIST / "pyforge.html").write_text(html)
     return len(js), len(html)
